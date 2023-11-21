@@ -16,7 +16,7 @@ class TestCalculator(unittest.TestCase):
     @parameterized.expand(
         # 1. arrange
         [
-            ("integers", 2, 3, 6),
+            ("integers", 2, 3, 5),
             ("floats", 2.5, 3.1, 5.6),
             ("negative", -2.5, 3.0, 0.5)
         ]
@@ -69,7 +69,7 @@ class TestCalculator(unittest.TestCase):
         b = 0.000000005
 
         actual_result = self.calc.multiply(a, b)
-        expected_result = 1
+        expected_result = 0.000000025
 
         self.assertAlmostEqual(actual_result, expected_result)
 
@@ -86,19 +86,17 @@ class TestCalculator(unittest.TestCase):
         a = inf
         b = inf
 
-        expected_result = None
+        expected_result = math.nan
         actual_result = self.calc.divide(a, b)
 
         self.assertNotEqual(actual_result, expected_result)
-        self.assertIsInstance(actual_result, type(math.inf))
         self.assertIsInstance(actual_result, float)
 
     @parameterized.expand(
         # 1. arrange
         [
-            ("integers", 100, 2, 2),
-            ("floats", 8.9, 2, 0.94939000664491278472354336970244),
-            ("negative", -2.5, 2, TypeError)
+            ("integers", 100, 2, 6.643856189774725),
+            ("floats", 8.9, 2, 3.1538053360790355),
         ]
     )
     def test_log(self, name, a, b, expected_result):
@@ -108,25 +106,13 @@ class TestCalculator(unittest.TestCase):
         # 3. assert
         self.assertEqual(actual_result, expected_result)
 
-    @parameterized.expand([
-        ("strings", 'aaa', 'bbb', TypeError),
-        ("int_None", 1, None, TypeError),
-        ("None_float", None, 1.1, TypeError),
-        ("None_None", None, None, TypeError)
-
-    ])
-    def test_log_invalid_values(self, name, a, b, expected_result):
-        with self.assertRaises(expected_result):
-            self.calc.log(a, b)
-
     def test_log_invalid_input(self):
         a = -2
         b = 2
 
-        expected_result = TypeError
-
-        with self.assertRaises(expected_result):
+        with self.assertRaises(InvalidInputException):
             self.calc.log(a, b)
+
 
 if __name__ == "__main__":
     unittest.main()

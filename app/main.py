@@ -27,10 +27,13 @@ class Calculator:
         return a / b
 
     def log(self, a: numeric, base: numeric) -> numeric:
+        if not isinstance(a, (int, float)) or not isinstance(base, (int, float)):
+            raise TypeError("Both 'a' and 'base' must be a number")
+        if base == 0:
+            raise TypeError("'base' must not be zero")
+        if a <= 0 or base <= 0:
+            raise InvalidInputException("Both 'a' and 'base' must be positive")
         # TODO: cover this method with unit-tests
-        if not (isinstance(a, numeric) and isinstance(base, numeric)):
-            raise TypeError
-
         if a > 0 and a != 1 and base > 0:
             return math.log(a, base)
         else:
@@ -39,5 +42,3 @@ class Calculator:
 
 calc = Calculator()
 
-d = calc.log('a', 0)
-print(d)
